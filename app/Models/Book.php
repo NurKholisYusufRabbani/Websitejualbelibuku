@@ -32,4 +32,9 @@ class Book extends Model
     {
         return $this->belongsTo(Category::class, 'kategori_id');
     }
+
+    public function wishlistedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlist')->withTimestamps();
+    }
 }

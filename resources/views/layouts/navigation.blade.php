@@ -32,6 +32,11 @@
                 <a href="{{ route('cart.index') }}" class="mr-4 relative text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
                     <i class="fas fa-shopping-cart text-xl"></i>
                 </a>
+                
+                <!-- Wishlist Icon -->
+                <a href="{{ route('wishlist.index') }}" class="mr-4 relative text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white" title="Wishlist">
+                    <i class="fas fa-heart text-xl"></i>
+                </a>
 
                 <!-- Dropdown -->
                 <x-dropdown align="right" width="48">

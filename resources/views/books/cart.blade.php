@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="container mx-auto p-6">
     <h2 class="text-2xl font-bold text-white mb-4">Keranjang Belanja</h2>
 
@@ -83,18 +95,20 @@
 </div>
 
 <script>
-    function decrementQuantity(id) {
-        const quantityInput = document.getElementById(`quantity-${id}`);
-        let currentValue = parseInt(quantityInput.value) || 1;
-        if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-        }
+    // Fungsi untuk menambah quantity
+    function incrementQuantity(itemId) {
+        const quantityInput = document.getElementById('quantity-' + itemId);
+        let currentQuantity = parseInt(quantityInput.value);
+        quantityInput.value = currentQuantity + 1; // Tambah 1
     }
 
-    function incrementQuantity(id) {
-        const quantityInput = document.getElementById(`quantity-${id}`);
-        let currentValue = parseInt(quantityInput.value) || 1;
-        quantityInput.value = currentValue + 1;
+    // Fungsi untuk mengurangi quantity
+    function decrementQuantity(itemId) {
+        const quantityInput = document.getElementById('quantity-' + itemId);
+        let currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity > 1) {
+            quantityInput.value = currentQuantity - 1; // Kurangi 1
+        }
     }
 </script>
 @endsection

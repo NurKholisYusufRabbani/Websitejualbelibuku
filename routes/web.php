@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserController;
@@ -18,11 +19,10 @@ Route::get('/', function () {
 
 // Middleware khusus admin
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // Admin dashboard
+    
     // Kelola Buku
     Route::resource('/books', AdminBookController::class);
-    Route::put('/admin/books/{book}', [BookController::class, 'update'])->name('admin.books.update');
 
     // Route untuk Upload Cover Buku
     Route::post('/books/upload', function (Illuminate\Http\Request $request) {
@@ -57,13 +57,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
 
+    // Rute Wishlist
+    Route::post('/wishlist/{book}', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+
     // Rute Keranjang
     Route::prefix('cart')->name('cart.')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('index');
         Route::get('/cart/view', [CartController::class, 'view'])->name('cart.view');
         Route::post('/add/{book}', [CartController::class, 'add'])->name('add');
-        Route::post('/update/{cartItem}', [CartController::class, 'update'])->name('update')->where('cartItem', '[0-9]+'); // Pastikan parameter adalah angka
+        Route::post('/update/{cartItem}', [CartController::class, 'update'])->name('update')->where('cartItem', '[0-9]+');
         Route::delete('/remove/{cartItem}', [CartController::class, 'remove'])->name('remove')->where('cartItem', '[0-9]+');
+        Route::post('/cart/update/{itemId}', [CartController::class, 'update'])->name('cart.update');
     });    
 
     Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');

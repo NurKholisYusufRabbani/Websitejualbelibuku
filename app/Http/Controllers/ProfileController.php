@@ -87,4 +87,9 @@ class ProfileController extends Controller
 
         return back()->with('error', 'Gagal mengunggah foto.');
     }
+
+    public function wishlist()
+    {
+        return $this->belongsToMany(Book::class, 'wishlist')->withTimestamps();
+    }
 }

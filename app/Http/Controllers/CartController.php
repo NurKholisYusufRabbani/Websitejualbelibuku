@@ -49,13 +49,28 @@ class CartController extends Controller
         ]);
     }    
 
-    public function update(Request $request, Cart $cartItem) {
-        $request->validate(['jumlah' => 'required|integer|min:1|max:' . $cartItem->book->stok]);
+    // Fungsi untuk update jumlah item dalam cart
+    public function update(Request $request, $itemId)
+    {
+        // Validasi input jumlah
+        $request->validate([
+            'jumlah' => 'required|integer|min:1', // Pastikan jumlah adalah angka dan minimal 1
+        ]);
 
+        // Mencari item cart berdasarkan ID
+        $cartItem = Cart::find($itemId);
+
+        // Cek apakah item ada
+        if (!$cartItem) {
+            return redirect()->route('cart.index')->with('error', 'Item not found.');
+        }
+
+        // Update jumlah item di cart
         $cartItem->jumlah = $request->jumlah;
         $cartItem->save();
 
-        return redirect()->route('cart.index')->with('success', 'Jumlah barang diperbarui.');
+        // Redirect ke halaman cart atau halaman lain dengan pesan sukses
+        return redirect()->route('cart.index')->with('success', 'Quantity updated successfully!');
     }
 
     public function remove(Cart $cartItem) {
