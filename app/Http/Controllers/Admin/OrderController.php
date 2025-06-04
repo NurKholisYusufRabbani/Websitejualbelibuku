@@ -10,25 +10,34 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::latest()->paginate(10);
+        // Gunakan paginate agar lebih scalable
+        $orders = Order::with(['orderItems.book', 'shippingStatus', 'user'])->latest()->paginate(10);
         return view('admin.orders.index', compact('orders'));
-    }
-
-    public function show(Order $order)
-    {
-        return view('admin.orders.show', compact('order'));
     }
 
     public function update(Request $request, Order $order)
     {
-        $request->validate(['status' => 'required|string']);
-        $order->update(['status' => $request->status]);
-        return redirect()->route('admin.orders.index')->with('success', 'Status updated.');
-    }
+        $request->validate([
+            'status' => 'required|string',
+            'shipping_status' => 'nullable|string',
+            'tracking_number' => 'nullable|string',
+        ]);
 
-    public function destroy(Order $order)
-    {
-        $order->delete();
-        return redirect()->route('admin.orders.index')->with('success', 'Order deleted.');
+        $order->status = $request->status;
+        $order->save();
+
+        if ($order->shippingStatus) {
+            $order->shippingStatus->update([
+                'status' => $request->shipping_status,
+                'tracking_number' => $request->tracking_number,
+            ]);
+        } else {
+            $order->shippingStatus()->create([
+                'status' => $request->shipping_status,
+                'tracking_number' => $request->tracking_number,
+            ]);
+        }
+
+        return redirect()->route('admin.orders.index')->with('success', 'Pesanan diperbarui!');
     }
 }
