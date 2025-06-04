@@ -18,6 +18,8 @@ class ShippingStatus extends Model
         'tracking_number',
     ];
 
+    public $timestamps = false;
+
     public function order()
     {
         return $this->belongsTo(Order::class);
