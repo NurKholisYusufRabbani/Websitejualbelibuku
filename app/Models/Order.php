@@ -32,4 +32,14 @@ class Order extends Model
     {
         return $this->hasOne(ShippingStatus::class);
     }
+
+    public function discounts()
+    {
+        return $this->belongsToMany(Discount::class, 'order_discounts');
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

@@ -84,7 +84,7 @@
                 <p class="text-xl font-semibold text-white">
                     Total: <span class="text-blue-400">Rp{{ number_format($cartTotal, 0, ',', '.') }}</span>
                 </p>
-                <a href="{{ route('checkout') }}" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+                <a href="{{ route('checkout.show') }}" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
                     Checkout
                 </a>
             </div>
