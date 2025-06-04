@@ -44,9 +44,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     })->name('books.upload');
 
     // Kelola Pesanan
-    Route::resource('/orders', AdminOrderController::class);
-    Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
-    Route::put('/admin/orders/{order}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
+    Route::resource('orders', AdminOrderController::class)->only(['index', 'update', 'edit', 'destroy']);
 
     // Kelola Pengguna
     Route::resource('/users', UserController::class);
